@@ -1,6 +1,6 @@
 {
   "name": "nunjucks-watch",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Compile Nunjucks templates and watch its dependencies",
   "license": "MIT",
   "repository": "kei-ito/gulp-nunjucks",
@@ -21,10 +21,12 @@
   "keywords": [
     "nunjucks",
     "template",
-    "templating"
+    "templating",
+    "watch"
   ],
   "dependencies": {
     "chokidar": "^1.6.1",
+    "mkdirp": "^0.5.1",
     "nunjucks": "^3.0.0"
   }
 }
