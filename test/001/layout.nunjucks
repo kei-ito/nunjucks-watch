@@ -1,0 +1,8 @@
+<!doctype html>
+<meta charset="utf-8">
+{% for css in styles %}
+<link rel="stylesheet" href="{{ css }}">
+{% endfor %}
+{% for script in scripts %}
+<script src="{{ script }}"></script>
+{% endfor %}
