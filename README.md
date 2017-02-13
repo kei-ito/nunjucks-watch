@@ -1,4 +1,4 @@
-# nunjucks-watch
+# nunjucks-watch [![Build Status](https://travis-ci.org/kei-ito/nunjucks-watch.svg?branch=master)](https://travis-ci.org/kei-ito/nunjucks-watch)
 
 Auto updator for [Nunjucks](https://mozilla.github.io/nunjucks/).
 It resolves location of dependents relative to the rendering target and watch them with [chokidar](https://github.com/paulmillr/chokidar).
