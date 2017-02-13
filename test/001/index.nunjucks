@@ -1,0 +1,7 @@
+{% extends "./layout.nunjucks" %}
+{% set styles = [
+	'css/index.css'
+] %}
+{% set scripts = [
+	'js/index.js'
+] %}

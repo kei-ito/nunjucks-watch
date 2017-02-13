@@ -1,0 +1,30 @@
+{
+  "name": "nunjucks-watch",
+  "version": "0.0.1",
+  "description": "Compile Nunjucks templates and watch its dependencies",
+  "license": "MIT",
+  "repository": "kei-ito/gulp-nunjucks",
+  "author": {
+    "name": "Kei Ito",
+    "email": "kei.itof@gmail.com",
+    "url": "https://github.com/kei-ito"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "scripts": {
+    "test": "mocha --recursive"
+  },
+  "files": [
+    "index.js"
+  ],
+  "keywords": [
+    "nunjucks",
+    "template",
+    "templating"
+  ],
+  "dependencies": {
+    "chokidar": "^1.6.1",
+    "nunjucks": "^3.0.0"
+  }
+}
