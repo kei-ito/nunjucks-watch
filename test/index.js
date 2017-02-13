@@ -20,7 +20,8 @@ describe('NunjucksWatcher', function () {
 
 	it('should render a template', function (done) {
 		const targetDir = path.join(__dirname, '001');
-		nunjucksWatch.watch(path.join(targetDir, 'index.nunjucks'), {
+		nunjucksWatch.watch({
+			src: path.join(targetDir, 'index.nunjucks'),
 			context: {
 				currentTime: currentTime
 			}
@@ -42,7 +43,8 @@ describe('NunjucksWatcher', function () {
 	it('should write the result to dest', function (done) {
 		const targetDir = path.join(__dirname, '001');
 		const destPath = path.join(targetDir, 'output.txt');
-		nunjucksWatch.watch(path.join(targetDir, 'index.nunjucks'), {
+		nunjucksWatch.watch({
+			src: path.join(targetDir, 'index.nunjucks'),
 			dest: destPath,
 			context: {
 				currentTime: currentTime
