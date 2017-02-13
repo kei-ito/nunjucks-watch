@@ -6,3 +6,4 @@
 {% for script in scripts %}
 <script src="{{ script }}"></script>
 {% endfor %}
+<script type="text/plain">{{ currentTime }}</script>
