@@ -1,6 +1,6 @@
 {
   "name": "nunjucks-watch",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Compile Nunjucks templates and watch its dependencies",
   "license": "MIT",
   "repository": "kei-ito/gulp-nunjucks",
@@ -13,11 +13,9 @@
     "node": ">=6"
   },
   "scripts": {
-    "test": "mocha --recursive"
+    "test": "mocha"
   },
-  "files": [
-    "index.js"
-  ],
+  "main": "nunjucksWatch",
   "keywords": [
     "nunjucks",
     "template",
@@ -25,11 +23,13 @@
     "watch"
   ],
   "dependencies": {
+    "@kei-ito/debounce": "^0.0.1",
+    "@kei-ito/promisify": "^0.0.1",
+    "@kei-ito/write-file": "^0.0.1",
     "chokidar": "^1.6.1",
-    "mkdirp": "^0.5.1",
     "nunjucks": "^3.0.0"
   },
   "devDependencies": {
-    "mocha": "*"
+    "mocha": "^3.2.0"
   }
 }
