@@ -69,7 +69,7 @@ describe('nunjucksWatch', function () {
 								done();
 							})
 							.catch(done);
-					}, 100));
+					}, 50));
 			});
 	});
 
