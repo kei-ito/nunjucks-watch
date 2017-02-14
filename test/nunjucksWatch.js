@@ -22,6 +22,14 @@ const rendered = `<!doctype html>
 
 describe('nunjucksWatch', function () {
 
+	let watcher;
+
+	afterEach(function () {
+		if (watcher) {
+			watcher.close();
+		}
+	});
+
 	it('should render a template', function (done) {
 		const targetDir = path.join(__dirname, '001');
 		nunjucksWatch.watch({
@@ -48,6 +56,16 @@ describe('nunjucksWatch', function () {
 		this.timeout(5000);
 		const targetDir = path.join(__dirname, '001');
 		const destPath = path.join(targetDir, 'output.txt');
+		watcher = chokidar.watch(destPath)
+			.once('error', done)
+			.on('all', debounce(() => {
+				readFile(destPath, 'utf8')
+					.then((result) => {
+						assert.equal(result, rendered);
+						done();
+					})
+					.catch(done);
+			}, 50));
 		nunjucksWatch.watch({
 			src: path.join(targetDir, 'index.nunjucks'),
 			dest: destPath,
@@ -55,23 +73,7 @@ describe('nunjucksWatch', function () {
 				currentTime: currentTime
 			}
 		})
-			.once('error', done)
-			.once('update', function () {
-				const watcher = chokidar.watch(destPath)
-					.once('error', (error) => {
-						watcher.close();
-						done(error);
-					})
-					.on('all', debounce(() => {
-						watcher.close();
-						readFile(destPath, 'utf8')
-							.then((result) => {
-								assert.equal(result, rendered);
-								done();
-							})
-							.catch(done);
-					}, 50));
-			});
+			.once('error', done);
 	});
 
 });
