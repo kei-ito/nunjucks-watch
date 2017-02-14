@@ -1,10 +1,9 @@
-const fs = require('fs');
-const path = require('path');
 const EventEmitter = require('events');
 const nunjucks = require('nunjucks');
-const mkdirp = require('mkdirp');
+const writeFile = require('@kei-ito/write-file');
 
 const FSLoader = require('./FSLoader');
+const promisify = require('@kei-ito/promisify');
 
 /**
  * NunjucksWatcher object
@@ -23,28 +22,19 @@ class NunjucksWatcher extends EventEmitter {
 		super();
 		this.loader = new FSLoader(opts.fsLoader);
 		this.environment = new nunjucks.Environment(this.loader, opts.environment);
+		this.environment.pRender = promisify(this.environment.render, this.environment);
 		this.loader
 			.on('update', () => {
-				this.environment.render(opts.src, opts.context, (error, result) => {
-					if (error) {
-						this.emit('error', error);
-					} else {
+				this.environment.pRender(opts.src, opts.context)
+					.then((result) => {
 						this.emit('update', result);
 						if (opts.dest) {
-							mkdirp(path.dirname(opts.dest), (error) => {
-								if (error) {
-									this.emit('error', error);
-								} else {
-									fs.writeFile(opts.dest, result, (error) => {
-										if (error) {
-											this.emit('error', error);
-										}
-									});
-								}
-							});
+							writeFile(opts.dest, result);
 						}
-					}
-				});
+					})
+					.catch((error) => {
+						this.emit(error);
+					});
 			})
 			.emit('update');
 	}

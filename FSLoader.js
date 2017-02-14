@@ -1,9 +1,10 @@
 const EventEmitter = require('events');
 const path = require('path');
 const fs = require('fs');
-const chokidar = require('chokidar');
 const log = require('util').debuglog('nunjucks-watch');
-const debounce = require('./debounce');
+
+const chokidar = require('chokidar');
+const debounce = require('@kei-ito/debounce');
 
 /**
  * Nunjucks' loader object

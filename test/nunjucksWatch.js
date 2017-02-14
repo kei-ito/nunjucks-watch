@@ -1,8 +1,10 @@
 const assert = require('assert');
 const fs = require('fs');
 const path = require('path');
+
 const chokidar = require('chokidar');
-const debounce = require('../debounce');
+const debounce = require('@kei-ito/debounce');
+
 const nunjucksWatch = require('..');
 const currentTime = Date.now();
 const rendered = `<!doctype html>
@@ -16,7 +18,7 @@ const rendered = `<!doctype html>
 <script type="text/plain">${currentTime}</script>
 `;
 
-describe('NunjucksWatcher', function () {
+describe('nunjucksWatch', function () {
 
 	it('should render a template', function (done) {
 		const targetDir = path.join(__dirname, '001');
