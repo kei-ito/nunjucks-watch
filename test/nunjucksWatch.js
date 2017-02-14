@@ -4,7 +4,9 @@ const path = require('path');
 
 const chokidar = require('chokidar');
 const debounce = require('@kei-ito/debounce');
+const promisify = require('@kei-ito/promisify');
 
+const readFile = promisify(fs.readFile, fs);
 const nunjucksWatch = require('..');
 const currentTime = Date.now();
 const rendered = `<!doctype html>
@@ -61,14 +63,12 @@ describe('nunjucksWatch', function () {
 					})
 					.on('all', debounce(() => {
 						watcher.close();
-						fs.readFile(destPath, (error, result) => {
-							if (error) {
-								done(error);
-							} else {
-								assert.equal(result.toString(), rendered);
+						readFile(destPath, 'utf8')
+							.then((result) => {
+								assert.equal(result, rendered);
 								done();
-							}
-						});
+							})
+							.catch(done);
 					}, 100));
 			});
 	});
