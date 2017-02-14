@@ -1,9 +1,9 @@
 {
   "name": "nunjucks-watch",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Compile Nunjucks templates and watch its dependencies",
   "license": "MIT",
-  "repository": "kei-ito/gulp-nunjucks",
+  "repository": "kei-ito/nunjucks-watch",
   "author": {
     "name": "Kei Ito",
     "email": "kei.itof@gmail.com",
