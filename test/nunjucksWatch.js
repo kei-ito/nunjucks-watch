@@ -54,13 +54,13 @@ describe('nunjucksWatch', function () {
 		})
 			.once('error', done)
 			.once('update', function () {
-				const watcher = chokidar.watch(destPath);
-				watcher.once('error', function (error) {
-						this.close();
+				const watcher = chokidar.watch(destPath)
+					.once('error', (error) => {
+						watcher.close();
 						done(error);
 					})
-					.on('all', debounce(function () {
-						this.close();
+					.on('all', debounce(() => {
+						watcher.close();
 						fs.readFile(destPath, (error, result) => {
 							if (error) {
 								done(error);
@@ -69,7 +69,7 @@ describe('nunjucksWatch', function () {
 								done();
 							}
 						});
-					}, 100, watcher));
+					}, 100));
 			});
 	});
 
