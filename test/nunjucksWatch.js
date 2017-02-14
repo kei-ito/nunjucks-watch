@@ -45,6 +45,7 @@ describe('nunjucksWatch', function () {
 	});
 
 	it('should write the result to dest', function (done) {
+		this.timeout(5000);
 		const targetDir = path.join(__dirname, '001');
 		const destPath = path.join(targetDir, 'output.txt');
 		nunjucksWatch.watch({

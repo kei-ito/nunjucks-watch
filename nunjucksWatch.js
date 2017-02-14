@@ -31,12 +31,12 @@ class NunjucksWatcher extends EventEmitter {
 						if (opts.dest) {
 							writeFile(opts.dest, result)
 								.catch((error) => {
-									this.emit(error);
+									this.emit('error', error);
 								});
 						}
 					})
 					.catch((error) => {
-						this.emit(error);
+						this.emit('error', error);
 					});
 			})
 			.emit('update');
