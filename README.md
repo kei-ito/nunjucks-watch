@@ -5,15 +5,15 @@ It resolves location of dependents relative to the rendering target and watch th
 
 [![Build Status](https://travis-ci.org/kei-ito/nunjucks-watch.svg?branch=master)](https://travis-ci.org/kei-ito/nunjucks-watch)
 
-# Install
+## Install
 
 ```
 npm install nunjucks-watch
 ```
 
-# Usage
+## Usage
 
-## Write result to a file
+### Write result to a file
 
 ```javascript
 const nunjucksWatch = require('nunjucks-watch');
@@ -26,7 +26,7 @@ const watcher = nunjucksWatch.watch({
 });
 ```
 
-## Receive result as a string
+### Receive result as a string
 
 ```javascript
 const nunjucksWatch = require('nunjucks-watch');
@@ -41,41 +41,45 @@ const watcher = nunjucksWatch.watch({
 	});
 ```
 
-# API
+## API
 
-## nunjucksWatch.watch(options)
+### nunjucksWatch.watch(options)
 
 Start an updator.
 
-### options
+#### options
 
 Type: `Object`
 
-### options.src
+#### options.src
 
 Type: `String` (required)
 
 A path to a file to be rendered.
 
-### options.dest
+#### options.dest
 
 Type: `String` (optional)
 
 A path to which an updator will write the rendered text.
 
-### options.context
+#### options.context
 
 Type: `Object` (optional)
 
 `options.context` will be used as a context object on [rendering](https://mozilla.github.io/nunjucks/api.html#render).
-### options.environment
+#### options.environment
 
 Type: `Object` (optional)
 
 `options.environment` will be passed to the [nunjucks.Environment](https://mozilla.github.io/nunjucks/api.html#constructor) constructor.
 
-### options.fsLoader.debounce
+#### options.fsLoader.debounce
 
 Type: `Number` (optional)
 
 Time to wait for debouncing (milliseconds).
+
+## License
+
+MIT

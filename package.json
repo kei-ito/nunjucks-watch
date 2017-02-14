@@ -1,6 +1,6 @@
 {
   "name": "nunjucks-watch",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Compile Nunjucks templates and watch its dependencies",
   "license": "MIT",
   "repository": "kei-ito/nunjucks-watch",
