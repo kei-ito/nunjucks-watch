@@ -76,4 +76,35 @@ describe('nunjucksWatch', function () {
 			.once('error', done);
 	});
 
+	it('should close the watcher', function (done) {
+		const targetDir = path.join(__dirname, '001');
+		nunjucksWatch.watch({
+			src: path.join(targetDir, 'index.nunjucks'),
+			context: {
+				currentTime: currentTime
+			}
+		})
+			.once('error', done)
+			.once('update', function (result) {
+				assert.equal(result, rendered);
+				this.once('update', () => {
+					this.close();
+					this.once('update', () => {
+						done(new Error('Updated unexpectedly'));
+					});
+					fs.utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN, (error) => {
+						if (error) {
+							done(error);
+						}
+					});
+					setTimeout(done, 200);
+				});
+				fs.utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN, (error) => {
+					if (error) {
+						done(error);
+					}
+				});
+			});
+	});
+
 });
