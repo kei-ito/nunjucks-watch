@@ -42,6 +42,10 @@ class NunjucksWatcher extends EventEmitter {
 			.emit('update');
 	}
 
+	close () {
+		this.loader.watcher.close();
+	}
+
 }
 
 exports.NunjucksWatcher = NunjucksWatcher;
