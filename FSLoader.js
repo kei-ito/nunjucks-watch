@@ -27,7 +27,7 @@ class FSLoader extends EventEmitter {
 				log(eventType, filePath);
 				const watching = this.watcher.getWatched();
 				// Reset all watchers
-				for (const directory in watching) {
+				for (const directory of Object.keys(watching)) {
 					watching[directory].forEach((watchedFilePath) => {
 						this.watcher.unwatch(watchedFilePath);
 					});
