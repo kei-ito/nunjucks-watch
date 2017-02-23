@@ -1,5 +1,6 @@
 const assert = require('assert');
 const path = require('path');
+const promisify = require('@kei-ito/promisify');
 
 const FSLoader = require('../FSLoader');
 
@@ -38,12 +39,12 @@ describe('FSLoader', function () {
 
 	describe('getSource', function () {
 
-		it('should read file', function (done) {
-			loader.getSource(loader.resolve(path.join(__dirname, 'test'), './001/index.nunjucks'), (error, result) => {
-				assert.equal(error, null);
-				assert.deepEqual(result.src.toString().indexOf('{% extends "./layout.nunjucks" %}'), 0);
-				done();
-			});
+		it('should read file', function () {
+			const filePath = loader.resolve(path.join(__dirname, 'test'), './001/index.nunjucks');
+			return promisify(loader.getSource, loader)(filePath)
+				.then((result) => {
+					assert.deepEqual(result.src.toString().indexOf('{% extends "./layout.nunjucks" %}'), 0);
+				});
 		});
 
 	});
