@@ -7,6 +7,7 @@ const debounce = require('@kei-ito/debounce');
 const promisify = require('@kei-ito/promisify');
 
 const readFile = promisify(fs.readFile, fs);
+const utimes = promisify(fs.utimes, fs);
 const nunjucksWatch = require('..');
 const currentTime = Date.now();
 const rendered = `<!doctype html>
@@ -30,24 +31,25 @@ describe('nunjucksWatch', function () {
 		}
 	});
 
-	it('should render a template', function (done) {
+	it('should render a template', function () {
 		const targetDir = path.join(__dirname, '001');
-		nunjucksWatch.watch({
+		const watcher = nunjucksWatch.watch({
 			src: path.join(targetDir, 'index.nunjucks'),
 			context: {
 				currentTime: currentTime
 			}
+		});
+		return new Promise((resolve, reject) => {
+			watcher
+				.once('error', reject)
+				.once('update', resolve);
 		})
-			.once('error', done)
-			.once('update', function (result) {
+			.then((result) => {
 				assert.equal(result, rendered);
-				this.once('update', () => {
-					done();
-				});
-				fs.utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN, (error) => {
-					if (error) {
-						done(error);
-					}
+				return new Promise((resolve, reject) => {
+					watcher.once('update', resolve);
+					utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN)
+						.catch(reject);
 				});
 			});
 	});
@@ -76,33 +78,36 @@ describe('nunjucksWatch', function () {
 			.once('error', done);
 	});
 
-	it('should close the watcher', function (done) {
+	it('should close the watcher', function () {
 		const targetDir = path.join(__dirname, '001');
-		nunjucksWatch.watch({
+		const watcher = nunjucksWatch.watch({
 			src: path.join(targetDir, 'index.nunjucks'),
 			context: {
 				currentTime: currentTime
 			}
+		});
+		return new Promise((resolve, reject) => {
+			watcher
+				.once('error', reject)
+				.once('update', resolve);
 		})
-			.once('error', done)
-			.once('update', function (result) {
+			.then((result) => {
 				assert.equal(result, rendered);
-				this.once('update', () => {
-					this.close();
-					this.once('update', () => {
-						done(new Error('Updated unexpectedly'));
-					});
-					fs.utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN, (error) => {
-						if (error) {
-							done(error);
-						}
-					});
-					setTimeout(done, 200);
+				return new Promise((resolve, reject) => {
+					watcher.once('update', resolve);
+					utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN)
+						.catch(reject);
 				});
-				fs.utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN, (error) => {
-					if (error) {
-						done(error);
-					}
+			})
+			.then(() => {
+				watcher.close();
+				return new Promise((resolve, reject) => {
+					watcher.once('update', () => {
+						reject(new Error('Updated unexpectedly'));
+					});
+					utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN)
+						.catch(reject);
+					setTimeout(resolve, 200);
 				});
 			});
 	});
