@@ -3,6 +3,7 @@
 [![Build Status](https://travis-ci.org/kei-ito/nunjucks-watch.svg?branch=master)](https://travis-ci.org/kei-ito/nunjucks-watch)
 [![Code Climate](https://lima.codeclimate.com/github/kei-ito/nunjucks-watch/badges/gpa.svg)](https://lima.codeclimate.com/github/kei-ito/nunjucks-watch)
 [![Test Coverage](https://lima.codeclimate.com/github/kei-ito/nunjucks-watch/badges/coverage.svg)](https://lima.codeclimate.com/github/kei-ito/nunjucks-watch/coverage)
+[![dependencies Status](https://david-dm.org/kei-ito/nunjucks-watch/status.svg)](https://david-dm.org/kei-ito/nunjucks-watch)
 
 Auto updator for [Nunjucks](https://mozilla.github.io/nunjucks/).
 It resolves location of dependents relative to the rendering target and watch them with [chokidar](https://github.com/paulmillr/chokidar).
