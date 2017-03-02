@@ -3,8 +3,8 @@ const fs = require('fs');
 const path = require('path');
 
 const chokidar = require('chokidar');
-const debounce = require('@kei-ito/debounce');
-const promisify = require('@kei-ito/promisify');
+const debounce = require('j1/debounce');
+const promisify = require('j1/promisify');
 
 const readFile = promisify(fs.readFile, fs);
 const utimes = promisify(fs.utimes, fs);

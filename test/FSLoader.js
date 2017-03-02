@@ -1,6 +1,6 @@
 const assert = require('assert');
 const path = require('path');
-const promisify = require('@kei-ito/promisify');
+const promisify = require('j1/promisify');
 
 const FSLoader = require('../FSLoader');
 

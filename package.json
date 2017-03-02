@@ -1,6 +1,6 @@
 {
 	"name": "nunjucks-watch",
-	"version": "0.0.7",
+	"version": "0.0.8",
 	"description": "Compile Nunjucks templates and watch its dependencies",
 	"license": "MIT",
 	"repository": "kei-ito/nunjucks-watch",
@@ -24,9 +24,7 @@
 		"watch"
 	],
 	"dependencies": {
-		"@kei-ito/debounce": "^0.0.1",
-		"@kei-ito/promisify": "^0.0.1",
-		"@kei-ito/write-file": "^0.0.1",
+		"j1": "^0.0.20",
 		"chokidar": "^1.6.1",
 		"nunjucks": "^3.0.0"
 	},

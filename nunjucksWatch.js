@@ -1,9 +1,9 @@
 const EventEmitter = require('events');
 const nunjucks = require('nunjucks');
-const writeFile = require('@kei-ito/write-file');
+const writeFile = require('j1/writeFile');
 
 const FSLoader = require('./FSLoader');
-const promisify = require('@kei-ito/promisify');
+const promisify = require('j1/promisify');
 
 /**
  * NunjucksWatcher object
