@@ -4,7 +4,7 @@ const fs = require('fs');
 const log = require('util').debuglog('nunjucks-watch');
 
 const chokidar = require('chokidar');
-const debounce = require('@kei-ito/debounce');
+const debounce = require('j1/debounce');
 
 /**
  * Nunjucks' loader object
