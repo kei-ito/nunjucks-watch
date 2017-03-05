@@ -11,14 +11,14 @@ const promisify = require('j1/promisify');
 class NunjucksWatcher extends EventEmitter {
 
 	/**
-	 * @param {Object} opts
-	 * @param {string} opts.src
-	 * @param {?Object} opts.fsLoader
-	 * @param {?Object} opts.environment
-	 * @param {?Object} opts.context
-	 * @param {?string} opts.dest
+	 * @param {Object} opts options.
+	 * @param {string} opts.src A path to a nunjucks source.
+	 * @param {?Object} opts.fsLoader An object passed to FSLoader.
+	 * @param {?Object} opts.environment An object passsed to nunjucks.Environment.
+	 * @param {?Object} opts.context An context object.
+	 * @param {?string} opts.dest A path to write result.
 	 */
-	constructor (opts = {}) {
+	constructor(opts = {}) {
 		super();
 		this.loader = new FSLoader(opts.fsLoader);
 		this.environment = new nunjucks.Environment(this.loader, opts.environment);
@@ -42,7 +42,7 @@ class NunjucksWatcher extends EventEmitter {
 			.emit('update');
 	}
 
-	close () {
+	close() {
 		this.loader.watcher.close();
 	}
 

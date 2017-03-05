@@ -5,6 +5,9 @@ const log = require('util').debuglog('nunjucks-watch');
 
 const chokidar = require('chokidar');
 const debounce = require('j1/debounce');
+const isUndefined = require('j1/isUndefined');
+
+const DEFAULT_DEBOUNCE_TIME = 100;
 
 /**
  * Nunjucks' loader object
@@ -13,16 +16,17 @@ const debounce = require('j1/debounce');
 class FSLoader extends EventEmitter {
 
 	/**
-	 * @param {?Object} opts
-	 * @param {number} opts.debounce debouncing time after file updates
+	 * @param {?Object} opts options.
+	 * @param {number} opts.debounce debouncing time after file updates.
 	 */
-	constructor (opts = {}) {
+	constructor(opts = {}) {
 		super();
 		// This flag brings a callback to the second argument of getSource()
+		if (isUndefined(opts.debounce)) {
+			opts.debounce = DEFAULT_DEBOUNCE_TIME;
+		}
 		this.async = true;
-		this.watcher = chokidar.watch(null, {
-			ignoreInitial: true
-		})
+		this.watcher = chokidar.watch(null, {ignoreInitial: true})
 			.on('all', debounce((eventType, filePath) => {
 				log(eventType, filePath);
 				const watching = this.watcher.getWatched();
@@ -34,16 +38,16 @@ class FSLoader extends EventEmitter {
 				}
 				// Start the renderer
 				this.emit('update');
-			}, opts.debounce || 100));
+			}, opts.debounce));
 	}
 
 	/**
 	 * Read a file from the filePath.
-	 * @param {string} filePath
-	 * @param {function} callback
+	 * @param {string} filePath a path the loader loads data from.
+	 * @param {function} callback a function called after loading.
 	 * @return {void}
 	 */
-	getSource (filePath, callback) {
+	getSource(filePath, callback) {
 		log(`getSource: ${filePath}`);
 		this.watcher.add(filePath);
 		fs.readFile(filePath, (error, buffer) => {
@@ -55,27 +59,29 @@ class FSLoader extends EventEmitter {
 		});
 	}
 
+	/* eslint-disable class-methods-use-this */
 	/**
 	 * Called before getSource().
 	 * Checks the first argument is a relative path or not.
-	 * @param {string} filePath
-	 * @return {boolean}
+	 * @param {string} filePath a path to check.
+	 * @return {boolean} true: the first argument is a relative path.
 	 */
-	isRelative (filePath) {
-		return /^\.\.?\//.test(filePath);
+	isRelative(filePath) {
+		return (/^\.\.?\//).test(filePath);
 	}
 
 	/**
 	 * Called when isReative() above returns true.
-	 * @param {string} parentFilePath
-	 * @param {string} filePath
-	 * @return {string}
+	 * @param {string} parentFilePath a path where the filePath is resolved from.
+	 * @param {string} filePath a path to be resolved.
+	 * @return {string} a path to file.
 	 */
-	resolve (parentFilePath, filePath) {
+	resolve(parentFilePath, filePath) {
 		log(`resolve: ${filePath} from ${parentFilePath}`);
 		const resolvedPath = path.join(path.dirname(parentFilePath), filePath);
 		return resolvedPath;
 	}
+	/* eslint-enable class-methods-use-this */
 
 }
 

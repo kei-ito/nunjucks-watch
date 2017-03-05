@@ -3,13 +3,10 @@ const path = require('path');
 const promisify = require('j1/promisify');
 
 const FSLoader = require('../FSLoader');
+const loader = new FSLoader();
 
 describe('FSLoader', function () {
-
-	const loader = new FSLoader();
-
 	describe('isRelative', function () {
-
 		[
 			['./a', true],
 			['b', false],
@@ -20,11 +17,9 @@ describe('FSLoader', function () {
 				assert.equal(loader.isRelative(test[0]), test[1]);
 			});
 		});
-
 	});
 
 	describe('resolve', function () {
-
 		[
 			['/a', './b', '/b'],
 			['/a/b', './c', '/a/c'],
@@ -34,11 +29,9 @@ describe('FSLoader', function () {
 				assert.equal(loader.resolve(test[0], test[1]), test[2]);
 			});
 		});
-
 	});
 
 	describe('getSource', function () {
-
 		it('should read file', function () {
 			const filePath = loader.resolve(path.join(__dirname, 'test'), './001/index.nunjucks');
 			return promisify(loader.getSource, loader)(filePath)
@@ -46,7 +39,5 @@ describe('FSLoader', function () {
 					assert.deepEqual(result.src.toString().indexOf('{% extends "./layout.nunjucks" %}'), 0);
 				});
 		});
-
 	});
-
 });

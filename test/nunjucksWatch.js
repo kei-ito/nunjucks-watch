@@ -22,8 +22,7 @@ const rendered = `<!doctype html>
 `;
 
 describe('nunjucksWatch', function () {
-
-	let watcher;
+	let watcher = null;
 
 	afterEach(function () {
 		if (watcher) {
@@ -33,11 +32,9 @@ describe('nunjucksWatch', function () {
 
 	it('should render a template', function () {
 		const targetDir = path.join(__dirname, '001');
-		const watcher = nunjucksWatch.watch({
+		watcher = nunjucksWatch.watch({
 			src: path.join(targetDir, 'index.nunjucks'),
-			context: {
-				currentTime: currentTime
-			}
+			context: {currentTime: currentTime}
 		});
 		return new Promise((resolve, reject) => {
 			watcher
@@ -54,38 +51,40 @@ describe('nunjucksWatch', function () {
 			});
 	});
 
-	it('should write the result to dest', function (done) {
-		this.timeout(5000);
+	it('should write the result to dest', function () {
 		const targetDir = path.join(__dirname, '001');
 		const destPath = path.join(targetDir, 'output.txt');
-		watcher = chokidar.watch(destPath)
-			.once('error', done)
-			.on('all', debounce(() => {
-				readFile(destPath, 'utf8')
-					.then((result) => {
-						assert.equal(result, rendered);
-						done();
-					})
-					.catch(done);
-			}, 50));
-		nunjucksWatch.watch({
-			src: path.join(targetDir, 'index.nunjucks'),
-			dest: destPath,
-			context: {
-				currentTime: currentTime
-			}
+		const TIME_LIMIT_TO_COMPILE = 5000;
+		const DEBOUNCE_TIME = 50;
+		/* eslint-disable no-invalid-this */
+		this.timeout(TIME_LIMIT_TO_COMPILE);
+		/* eslint-enable no-invalid-this */
+		return new Promise((resolve, reject) => {
+			watcher = chokidar.watch(destPath)
+				.once('error', reject)
+				.on('all', debounce(resolve, DEBOUNCE_TIME));
+			nunjucksWatch.watch({
+				src: path.join(targetDir, 'index.nunjucks'),
+				dest: destPath,
+				context: {currentTime: currentTime}
+			})
+				.once('error', reject);
 		})
-			.once('error', done);
+			.then(() => {
+				return readFile(destPath, 'utf8');
+			})
+			.then((result) => {
+				assert.equal(result, rendered);
+			});
 	});
 
 	it('should close the watcher', function () {
 		const targetDir = path.join(__dirname, '001');
-		const watcher = nunjucksWatch.watch({
+		watcher = nunjucksWatch.watch({
 			src: path.join(targetDir, 'index.nunjucks'),
-			context: {
-				currentTime: currentTime
-			}
+			context: {currentTime: currentTime}
 		});
+		const TIME_TO_WAIT = 200;
 		return new Promise((resolve, reject) => {
 			watcher
 				.once('error', reject)
@@ -107,9 +106,8 @@ describe('nunjucksWatch', function () {
 					});
 					utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN)
 						.catch(reject);
-					setTimeout(resolve, 200);
+					setTimeout(resolve, TIME_TO_WAIT);
 				});
 			});
 	});
-
 });
