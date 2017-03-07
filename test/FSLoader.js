@@ -9,9 +9,9 @@ describe('FSLoader', function () {
 	describe('isRelative', function () {
 		[
 			['./a', true],
-			['b', false],
+			['b', true],
 			['../c', true],
-			['.../d', false]
+			['/d', false]
 		].forEach((test) => {
 			it(`${test[0]} is${test[1] ? ' ' : ' not '}a relative path`, function () {
 				assert.equal(loader.isRelative(test[0]), test[1]);

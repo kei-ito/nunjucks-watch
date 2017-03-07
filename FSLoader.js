@@ -67,7 +67,7 @@ class FSLoader extends EventEmitter {
 	 * @return {boolean} true: the first argument is a relative path.
 	 */
 	isRelative(filePath) {
-		return (/^\.\.?\//).test(filePath);
+		return !path.isAbsolute(filePath);
 	}
 
 	/**
