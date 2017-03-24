@@ -1,35 +1,35 @@
 {
-	"name": "nunjucks-watch",
-	"version": "0.0.9",
-	"description": "Compile Nunjucks templates and watch its dependencies",
-	"license": "MIT",
-	"repository": "kei-ito/nunjucks-watch",
-	"author": {
-		"name": "Kei Ito",
-		"email": "kei.itof@gmail.com",
-		"url": "https://github.com/kei-ito"
-	},
-	"engines": {
-		"node": ">=6"
-	},
-	"scripts": {
-		"test": "mocha",
-		"test_coverage": "istanbul cover _mocha"
-	},
-	"main": "nunjucksWatch",
-	"keywords": [
-		"nunjucks",
-		"template",
-		"templating",
-		"watch"
-	],
-	"dependencies": {
-		"j1": "^0.0.20",
-		"chokidar": "^1.6.1",
-		"nunjucks": "^3.0.0"
-	},
-	"devDependencies": {
-		"istanbul": "^0.4.5",
-		"mocha": "^3.2.0"
-	}
+  "name": "nunjucks-watch",
+  "version": "0.0.10",
+  "description": "Compile Nunjucks templates and watch its dependencies",
+  "license": "MIT",
+  "repository": "kei-ito/nunjucks-watch",
+  "author": {
+    "name": "Kei Ito",
+    "email": "kei.itof@gmail.com",
+    "url": "https://github.com/kei-ito"
+  },
+  "engines": {
+    "node": ">=6"
+  },
+  "scripts": {
+    "test": "mocha",
+    "test_coverage": "istanbul cover _mocha"
+  },
+  "main": "nunjucksWatch",
+  "keywords": [
+    "nunjucks",
+    "template",
+    "templating",
+    "watch"
+  ],
+  "dependencies": {
+    "j1": "^0.0.20",
+    "chokidar": "^1.6.1",
+    "nunjucks": "^3.0.0"
+  },
+  "devDependencies": {
+    "istanbul": "^0.4.5",
+    "mocha": "^3.2.0"
+  }
 }
