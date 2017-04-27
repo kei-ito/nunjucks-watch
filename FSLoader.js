@@ -3,12 +3,6 @@ const path = require('path');
 const fs = require('fs');
 const log = require('util').debuglog('nunjucks-watch');
 
-const chokidar = require('chokidar');
-const debounce = require('j1/debounce');
-const isUndefined = require('j1/isUndefined');
-
-const DEFAULT_DEBOUNCE_TIME = 100;
-
 /**
  * Nunjucks' loader object
  * https://mozilla.github.io/nunjucks/api.html#loader
@@ -19,26 +13,10 @@ class FSLoader extends EventEmitter {
 	 * @param {?Object} opts options.
 	 * @param {number} opts.debounce debouncing time after file updates.
 	 */
-	constructor(opts = {}) {
+	constructor() {
 		super();
 		// This flag brings a callback to the second argument of getSource()
-		if (isUndefined(opts.debounce)) {
-			opts.debounce = DEFAULT_DEBOUNCE_TIME;
-		}
 		this.async = true;
-		this.watcher = chokidar.watch(null, {ignoreInitial: true})
-			.on('all', debounce((eventType, filePath) => {
-				log(eventType, filePath);
-				const watching = this.watcher.getWatched();
-				// Reset all watchers
-				for (const directory of Object.keys(watching)) {
-					watching[directory].forEach((watchedFilePath) => {
-						this.watcher.unwatch(watchedFilePath);
-					});
-				}
-				// Start the renderer
-				this.emit('update');
-			}, opts.debounce));
 	}
 
 	/**
@@ -49,7 +27,7 @@ class FSLoader extends EventEmitter {
 	 */
 	getSource(filePath, callback) {
 		log(`getSource: ${filePath}`);
-		this.watcher.add(filePath);
+		this.emit('dependency', filePath);
 		fs.readFile(filePath, (error, buffer) => {
 			callback(error, buffer && {
 				src: buffer.toString(),

@@ -4,6 +4,11 @@ const writeFile = require('j1/writeFile');
 
 const FSLoader = require('./FSLoader');
 const promisify = require('j1/promisify');
+const chokidar = require('chokidar');
+const debounce = require('j1/debounce');
+const console = require('j1/console').create('nunjucks-watch');
+
+const DEFAULT_DEBOUNCE_TIME = 100;
 
 /**
  * NunjucksWatcher object
@@ -20,30 +25,50 @@ class NunjucksWatcher extends EventEmitter {
 	 */
 	constructor(opts = {}) {
 		super();
+		Object.assign(this, {
+			debounce: DEFAULT_DEBOUNCE_TIME,
+			context: {}
+		}, opts);
 		this.loader = new FSLoader(opts.fsLoader);
-		this.environment = new nunjucks.Environment(this.loader, opts.environment);
-		this.environment.pRender = promisify(this.environment.render, this.environment);
-		this.loader
-			.on('update', () => {
-				this.environment.pRender(opts.src, opts.context)
-					.then((result) => {
-						this.emit('update', result);
-						if (opts.dest) {
-							writeFile(opts.dest, result)
-								.catch((error) => {
-									this.emit('error', error);
-								});
-						}
-					})
-					.catch((error) => {
-						this.emit('error', error);
+		if (this.watch) {
+			this.watcher = chokidar.watch(null, {ignoreInitial: true})
+			.on('all', debounce((eventType, filePath) => {
+				console.debug(eventType, filePath);
+				const watching = this.watcher.getWatched();
+				// Reset all watchers
+				for (const directory of Object.keys(watching)) {
+					watching[directory].forEach((watchedFilePath) => {
+						this.watcher.unwatch(watchedFilePath);
 					});
-			})
-			.emit('update');
+				}
+				// Start the renderer
+				this.emit('update');
+			}, this.debounce));
+			this.loader.on('dependency', (file) => {
+				this.watcher.add(file);
+			});
+		}
+		this.environment = new nunjucks.Environment(this.loader, opts.environment);
+		this.update();
+	}
+
+	async update() {
+		try {
+			const render = promisify(this.environment.render, this.environment);
+			const result = await render(this.src, this.context);
+			this.emit('update', result);
+			if (this.dest) {
+				return writeFile(this.dest, result);
+			}
+		} catch (error) {
+			this.emit('error', error);
+		}
 	}
 
 	close() {
-		this.loader.watcher.close();
+		if (this.watcher) {
+			this.watcher.close();
+		}
 	}
 
 }

@@ -30,28 +30,27 @@ describe('nunjucksWatch', function () {
 		}
 	});
 
-	it('should render a template', function () {
+	it('should render a template', async function () {
 		const targetDir = path.join(__dirname, '001');
 		watcher = nunjucksWatch.watch({
+			watch: true,
 			src: path.join(targetDir, 'index.nunjucks'),
 			context: {currentTime: currentTime}
 		});
-		return new Promise((resolve, reject) => {
+		const result = await new Promise((resolve, reject) => {
 			watcher
 				.once('error', reject)
 				.once('update', resolve);
-		})
-			.then((result) => {
-				assert.equal(result, rendered);
-				return new Promise((resolve, reject) => {
-					watcher.once('update', resolve);
-					utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN)
-						.catch(reject);
-				});
-			});
+		});
+		assert.equal(result, rendered);
+		return new Promise((resolve, reject) => {
+			watcher.once('update', resolve);
+			utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN)
+				.catch(reject);
+		});
 	});
 
-	it('should write the result to dest', function () {
+	it('should write the result to dest', async function () {
 		const targetDir = path.join(__dirname, '001');
 		const destPath = path.join(targetDir, 'output.txt');
 		const TIME_LIMIT_TO_COMPILE = 5000;
@@ -59,55 +58,49 @@ describe('nunjucksWatch', function () {
 		/* eslint-disable no-invalid-this */
 		this.timeout(TIME_LIMIT_TO_COMPILE);
 		/* eslint-enable no-invalid-this */
-		return new Promise((resolve, reject) => {
+		await new Promise((resolve, reject) => {
 			watcher = chokidar.watch(destPath)
-				.once('error', reject)
-				.on('all', debounce(resolve, DEBOUNCE_TIME));
+			.once('error', reject)
+			.on('all', debounce(resolve, DEBOUNCE_TIME));
 			nunjucksWatch.watch({
+				watch: true,
 				src: path.join(targetDir, 'index.nunjucks'),
 				dest: destPath,
 				context: {currentTime: currentTime}
 			})
-				.once('error', reject);
-		})
-			.then(() => {
-				return readFile(destPath, 'utf8');
-			})
-			.then((result) => {
-				assert.equal(result, rendered);
-			});
+			.once('error', reject);
+		});
+		const result = await readFile(destPath, 'utf8');
+		assert.equal(result, rendered);
 	});
 
-	it('should close the watcher', function () {
+	it('should close the watcher', async function () {
 		const targetDir = path.join(__dirname, '001');
 		watcher = nunjucksWatch.watch({
+			watch: true,
 			src: path.join(targetDir, 'index.nunjucks'),
 			context: {currentTime: currentTime}
 		});
 		const TIME_TO_WAIT = 200;
-		return new Promise((resolve, reject) => {
+		const result = await new Promise((resolve, reject) => {
 			watcher
-				.once('error', reject)
-				.once('update', resolve);
-		})
-			.then((result) => {
-				assert.equal(result, rendered);
-				return new Promise((resolve, reject) => {
-					watcher.once('update', resolve);
-					utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN)
-						.catch(reject);
-				});
-			})
-			.then(() => {
-				watcher.close();
-				return new Promise((resolve, reject) => {
-					watcher.once('update', () => {
-						reject(new Error('Updated unexpectedly'));
-					});
-					utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN)
-						.catch(reject);
-					setTimeout(resolve, TIME_TO_WAIT);
-				});
+			.once('error', reject)
+			.once('update', resolve);
+		});
+		assert.equal(result, rendered);
+		await new Promise((resolve, reject) => {
+			watcher.once('update', resolve);
+			utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN)
+			.catch(reject);
+		});
+		watcher.close();
+		return new Promise((resolve, reject) => {
+			watcher.once('update', () => {
+				reject(new Error('Updated unexpectedly'));
 			});
+			utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN)
+			.catch(reject);
+			setTimeout(resolve, TIME_TO_WAIT);
+		});
 	});
 });
