@@ -56,10 +56,10 @@ class NunjucksWatcher extends EventEmitter {
 		try {
 			const render = promisify(this.environment.render, this.environment);
 			const result = await render(this.src, this.context);
-			this.emit('update', result);
 			if (this.dest) {
-				return writeFile(this.dest, result);
+				await writeFile(this.dest, result);
 			}
+			this.emit('update', result);
 		} catch (error) {
 			this.emit('error', error);
 		}
