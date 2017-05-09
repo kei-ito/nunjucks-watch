@@ -66,7 +66,7 @@ describe('nunjucksWatch', function () {
 				watch: true,
 				src: path.join(targetDir, 'index.nunjucks'),
 				dest: destPath,
-				context: {currentTime: currentTime}
+				context: {currentTime}
 			})
 			.once('error', reject);
 		});
@@ -79,28 +79,31 @@ describe('nunjucksWatch', function () {
 		watcher = nunjucksWatch.watch({
 			watch: true,
 			src: path.join(targetDir, 'index.nunjucks'),
-			context: {currentTime: currentTime}
+			context: {currentTime}
 		});
 		const TIME_TO_WAIT = 200;
-		const result = await new Promise((resolve, reject) => {
+		let result = await new Promise((resolve, reject) => {
 			watcher
 			.once('error', reject)
 			.once('update', resolve);
 		});
 		assert.equal(result, rendered);
-		await new Promise((resolve, reject) => {
-			watcher.once('update', resolve);
+		[result] = await Promise.all([
+			new Promise((resolve) => {
+				watcher.once('update', resolve);
+			}),
 			utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN)
-			.catch(reject);
-		});
+		]);
+		assert.equal(result, rendered);
 		watcher.close();
-		return new Promise((resolve, reject) => {
-			watcher.once('update', () => {
-				reject(new Error('Updated unexpectedly'));
-			});
+		await Promise.all([
+			new Promise((resolve, reject) => {
+				watcher.once('update', () => {
+					reject(new Error('Updated unexpectedly'));
+				});
+				setTimeout(resolve, TIME_TO_WAIT);
+			}),
 			utimes(path.join(targetDir, 'layout.nunjucks'), NaN, NaN)
-			.catch(reject);
-			setTimeout(resolve, TIME_TO_WAIT);
-		});
+		]);
 	});
 });

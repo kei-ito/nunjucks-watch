@@ -31,7 +31,10 @@ class NunjucksWatcher extends EventEmitter {
 		}, opts);
 		this.loader = new FSLoader(opts.fsLoader);
 		if (this.watch) {
-			this.watcher = chokidar.watch(null, {ignoreInitial: true})
+			this.watcher = chokidar.watch(null, {
+				ignoreInitial: true,
+				awaitWriteFinish: {stabilityThreshold: this.debounce}
+			})
 			.on('all', debounce((eventType, filePath) => {
 				console.debug(eventType, filePath);
 				const watching = this.watcher.getWatched();
@@ -42,7 +45,7 @@ class NunjucksWatcher extends EventEmitter {
 					});
 				}
 				// Start the renderer
-				this.emit('update');
+				this.update();
 			}, this.debounce));
 			this.loader.on('dependency', (file) => {
 				this.watcher.add(file);
