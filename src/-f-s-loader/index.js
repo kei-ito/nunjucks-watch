@@ -1,22 +1,30 @@
-const EventEmitter = require('events');
 const path = require('path');
 const fs = require('fs');
-const log = require('util').debuglog('nunjucks-watch');
 
 /**
  * Nunjucks' loader object
  * https://mozilla.github.io/nunjucks/api.html#loader
  */
-class FSLoader extends EventEmitter {
+exports.FSLoader = class FSLoader {
 
 	/**
 	 * @param {?Object} opts options.
 	 * @param {number} opts.debounce debouncing time after file updates.
 	 */
 	constructor() {
-		super();
+		this.listeners = [];
 		// This flag brings a callback to the second argument of getSource()
 		this.async = true;
+	}
+
+	addListener(fn) {
+		this.listeners.push(fn);
+	}
+
+	onDependency(filePath) {
+		for (const fn of this.listeners) {
+			fn(filePath);
+		}
 	}
 
 	/**
@@ -26,18 +34,16 @@ class FSLoader extends EventEmitter {
 	 * @return {void}
 	 */
 	getSource(filePath, callback) {
-		log(`getSource: ${filePath}`);
-		this.emit('dependency', filePath);
+		this.onDependency(filePath);
 		fs.readFile(filePath, (error, buffer) => {
 			callback(error, buffer && {
 				src: buffer.toString(),
 				path: filePath,
-				noCache: true
+				noCache: true,
 			});
 		});
 	}
 
-	/* eslint-disable class-methods-use-this */
 	/**
 	 * Called before getSource().
 	 * Checks the first argument is a relative path or not.
@@ -55,12 +61,8 @@ class FSLoader extends EventEmitter {
 	 * @return {string} a path to file.
 	 */
 	resolve(parentFilePath, filePath) {
-		log(`resolve: ${filePath} from ${parentFilePath}`);
 		const resolvedPath = path.join(path.dirname(parentFilePath), filePath);
 		return resolvedPath;
 	}
-	/* eslint-enable class-methods-use-this */
 
-}
-
-module.exports = FSLoader;
+};

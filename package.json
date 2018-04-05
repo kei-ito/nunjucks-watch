@@ -1,35 +1,37 @@
 {
-  "name": "nunjucks-watch",
-  "version": "0.0.14",
-  "description": "Compile Nunjucks templates and watch its dependencies",
-  "license": "MIT",
-  "repository": "kei-ito/nunjucks-watch",
-  "author": {
-    "name": "Kei Ito",
-    "email": "kei.itof@gmail.com",
-    "url": "https://github.com/kei-ito"
-  },
-  "engines": {
-    "node": ">=6"
-  },
-  "scripts": {
-    "test": "mocha",
-    "test_coverage": "istanbul cover _mocha"
-  },
-  "main": "nunjucksWatch",
-  "keywords": [
-    "nunjucks",
-    "template",
-    "templating",
-    "watch"
-  ],
-  "dependencies": {
-    "chokidar": "^1.6.1",
-    "j1": "0.0.25",
-    "nunjucks": "^3.0.0"
-  },
-  "devDependencies": {
-    "istanbul": "^1.1.0-alpha.1",
-    "mocha": "^3.2.0"
-  }
+	"name": "nunjucks-watch",
+	"version": "0.0.14",
+	"description": "Compile Nunjucks templates and watch its dependencies",
+	"license": "MIT",
+	"repository": "kei-ito/nunjucks-watch",
+	"author": {
+		"name": "Kei Ito",
+		"email": "kei.itof@gmail.com",
+		"url": "https://github.com/kei-ito"
+	},
+	"engines": {
+		"node": ">=6"
+	},
+	"scripts": {
+		"lint": "nlib-lint src test/*.js test/*/*.js",
+		"test": "node test",
+		"test_coverage": "nyc --reporter=lcov --reporter=text npm test"
+	},
+	"main": "src/index.js",
+	"keywords": [
+		"nunjucks",
+		"template",
+		"templating",
+		"watch"
+	],
+	"dependencies": {
+		"@nlib/write-file": "^1.0.1",
+		"chokidar": "^2.0.3",
+		"nunjucks": "^3.1.2"
+	},
+	"devDependencies": {
+		"@nlib/util": "0.0.0",
+		"@nlib/lint": "^2.2.9",
+		"@nlib/test": "^1.3.4"
+	}
 }
