@@ -1,4 +1,5 @@
 const assert = require('assert');
+const path = require('path');
 const test = require('@nlib/test');
 const {promisify} = require('@nlib/util');
 const {FSLoader} = require('../..');
@@ -27,7 +28,7 @@ test('FSLoader', (test) => {
 			['/a/b/c', '../d', '/a/d'],
 		]) {
 			test(`should resolve ${pattern} from ${from}`, () => {
-				assert.equal(loader.resolve(pattern, from), expected);
+				assert.equal(loader.resolve(pattern, from), path.normalize(expected));
 			});
 		}
 	});
