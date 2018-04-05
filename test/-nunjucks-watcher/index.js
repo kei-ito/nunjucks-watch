@@ -39,7 +39,7 @@ test('NunjucksWatcher', (test) => {
 			test.compare(result, rendered);
 			return new Promise((resolve, reject) => {
 				watcher.once('update', resolve);
-				utimes(path.join(targetDir, 'layout.nunjucks'), startedTime, startedTime).catch(reject);
+				utimes(path.join(targetDir, 'layout.nunjucks'), new Date(), new Date()).catch(reject);
 			});
 		});
 	});
@@ -85,7 +85,7 @@ test('NunjucksWatcher', (test) => {
 			.then((result) => test.compare(result, rendered))
 			.then(() => Promise.all([
 				new Promise((resolve) => watcher.once('update', resolve)),
-				utimes(path.join(targetDir, 'layout.nunjucks'), startedTime, startedTime),
+				utimes(path.join(targetDir, 'layout.nunjucks'), new Date(), new Date()),
 			]))
 			.then((result) => test.compare(result[0], rendered));
 		});
@@ -96,7 +96,7 @@ test('NunjucksWatcher', (test) => {
 					watcher.once('update', () => reject(new Error('Updated unexpectedly')));
 					setTimeout(resolve, 200);
 				}),
-				utimes(path.join(targetDir, 'layout.nunjucks'), startedTime, startedTime),
+				utimes(path.join(targetDir, 'layout.nunjucks'), new Date(), new Date()),
 			]);
 		});
 	});
