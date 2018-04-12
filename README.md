@@ -1,5 +1,7 @@
 # nunjucks-watch
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kei-ito/nunjucks-watch.svg)](https://greenkeeper.io/)
+
 [![Build Status](https://travis-ci.org/kei-ito/nunjucks-watch.svg?branch=master)](https://travis-ci.org/kei-ito/nunjucks-watch)
 [![Build status](https://ci.appveyor.com/api/projects/status/github/kei-ito/nunjucks-watch?branch=master&svg=true)](https://ci.appveyor.com/project/kei-ito/nunjucks-watch/branch/master)
 [![codecov](https://codecov.io/gh/kei-ito/nunjucks-watch/branch/master/graph/badge.svg)](https://codecov.io/gh/kei-ito/nunjucks-watch)
