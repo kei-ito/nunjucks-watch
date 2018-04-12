@@ -1,12 +1,9 @@
 # nunjucks-watch
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/kei-ito/nunjucks-watch.svg)](https://greenkeeper.io/)
-
 [![Build Status](https://travis-ci.org/kei-ito/nunjucks-watch.svg?branch=master)](https://travis-ci.org/kei-ito/nunjucks-watch)
 [![Build status](https://ci.appveyor.com/api/projects/status/github/kei-ito/nunjucks-watch?branch=master&svg=true)](https://ci.appveyor.com/project/kei-ito/nunjucks-watch/branch/master)
 [![codecov](https://codecov.io/gh/kei-ito/nunjucks-watch/branch/master/graph/badge.svg)](https://codecov.io/gh/kei-ito/nunjucks-watch)
-[![dependencies Status](https://david-dm.org/kei-ito/nunjucks-watch/status.svg)](https://david-dm.org/kei-ito/nunjucks-watch)
-[![devDependencies Status](https://david-dm.org/kei-ito/nunjucks-watch/dev-status.svg)](https://david-dm.org/kei-ito/nunjucks-watch?type=dev)
 
 Auto updator for [Nunjucks](https://mozilla.github.io/nunjucks/).
 It resolves location of dependents relative to the rendering target and watch them with [chokidar](https://github.com/paulmillr/chokidar).
