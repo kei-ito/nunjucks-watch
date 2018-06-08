@@ -4,8 +4,8 @@ const chokidar = require('chokidar');
 const test = require('@nlib/test');
 const {promisify} = require('@nlib/util');
 
-const readFile = promisify(fs.readFile, fs);
-const utimes = promisify(fs.utimes, fs);
+const readFile = promisify(fs.readFile);
+const utimes = promisify(fs.utimes);
 const {watch} = require('../..');
 const startedTime = Date.now();
 const rendered = `<!doctype html>
