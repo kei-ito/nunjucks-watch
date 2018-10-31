@@ -26,7 +26,6 @@
 	],
 	"dependencies": {
 		"@nlib/afs": "^0.2.4",
-		"@nlib/write-file": "^1.0.1",
 		"chokidar": "^2.0.4",
 		"nunjucks": "^3.1.2"
 	},
