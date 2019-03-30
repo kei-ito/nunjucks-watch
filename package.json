@@ -33,6 +33,6 @@
 		"@nlib/lint": "3.5.0",
 		"@nlib/test": "1.3.4",
 		"@nlib/util": "0.1.6",
-		"eslint": "5.15.3"
+		"eslint": "5.16.0"
 	}
 }
